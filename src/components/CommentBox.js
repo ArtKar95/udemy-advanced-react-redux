@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import * as actions from './../actions';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import * as actions from "./../actions";
 
 class CommentBox extends Component {
-  state = { comment: '' };
+  state = { comment: "" };
 
   handleChange = (event) => {
     this.setState({ comment: event.target.value });
@@ -12,17 +12,22 @@ class CommentBox extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     this.props.saveComment(this.state.comment);
-    this.setState({ comment: '' });
+    this.setState({ comment: "" });
   };
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <h2>Add a comment</h2>
-        <textarea onChange={this.handleChange} value={this.state.comment} />
-        <div>
-          <button>Add comment</button>
-        </div>
-      </form>
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <h2>Add a comment</h2>
+          <textarea onChange={this.handleChange} value={this.state.comment} />
+          <div>
+            <button>Add comment</button>
+          </div>
+        </form>
+        <button className="fetch-comments" onClick={this.props.fetchComments}>
+          Fetch comments
+        </button>
+      </div>
     );
   }
 }
