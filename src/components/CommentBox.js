@@ -1,35 +1,38 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import * as actions from "./../actions";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { fetchComments, saveComment } from "../actions";
+import requireAuth from "./requireAuth";
 
-class CommentBox extends Component {
-  state = { comment: "" };
+const CommentBox = () => {
+  const [comment, setComment] = useState("");
+  const dispatch = useDispatch();
 
-  handleChange = (event) => {
-    this.setState({ comment: event.target.value });
+  const handleChange = (event) => {
+    setComment(event.target.value);
   };
 
-  handleSubmit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    this.props.saveComment(this.state.comment);
-    this.setState({ comment: "" });
+    dispatch(saveComment(comment));
+    setComment("");
   };
-  render() {
-    return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <h2>Add a comment</h2>
-          <textarea onChange={this.handleChange} value={this.state.comment} />
-          <div>
-            <button>Add comment</button>
-          </div>
-        </form>
-        <button className="fetch-comments" onClick={this.props.fetchComments}>
-          Fetch comments
-        </button>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <h2>Add a comment</h2>
+        <textarea onChange={handleChange} value={comment} />
+        <div>
+          <button>Add comment</button>
+        </div>
+      </form>
+      <button
+        className="fetch-comments"
+        onClick={() => dispatch(fetchComments())}
+      >
+        Fetch comments
+      </button>
+    </div>
+  );
+};
 
-export default connect(null, actions)(CommentBox);
+export default requireAuth(CommentBox);
